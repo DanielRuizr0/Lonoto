@@ -9,6 +9,7 @@ import {
   crearMensajePedido,
   eliminarProductoCarrito
 } from './logicaCarrito.js';
+import { crearGaleriaPrivadaPedido } from './galeriaPedido.js';
 
 const TELEFONO_WHATSAPP = '573127557563';
 const IMG_FALLBACK = 'https://via.placeholder.com/100x100/141414/CCFF00?text=LONOTO';
@@ -119,14 +120,6 @@ function inicializarEventosCarrito() {
   renderizarCarrito();
 }
 
-function crearTokenGaleria() {
-  const bytes = crypto.getRandomValues(new Uint8Array(32));
-  return btoa(String.fromCharCode(...bytes))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/g, '');
-}
-
 async function prepararPedidoConGaleria(evento) {
   const botonPedido = evento.currentTarget;
   evento.preventDefault();
@@ -170,7 +163,6 @@ async function prepararPedidoConGaleria(evento) {
   botonPedido.setAttribute('aria-busy', 'true');
 
   try {
-    const token = crearTokenGaleria();
     const nombre = document.getElementById('cliente-nombre')?.value || '';
     const ciudad = document.getElementById('cliente-ciudad')?.value || '';
     const pedido = {
@@ -192,18 +184,8 @@ async function prepararPedidoConGaleria(evento) {
       }))
     };
 
-    const { error } = await supabase.functions.invoke('pedido-galeria', {
-      body: {
-        accion: 'crear',
-        token,
-        pedido
-      }
-    });
-    if (error) throw error;
-
-    const enlaceGaleria = new URL('../paginas/galeria-pedido.html', import.meta.url);
-    enlaceGaleria.searchParams.set('token', token);
-    const mensaje = crearMensajePedido(carrito, nombre, ciudad, enlaceGaleria.href);
+    const enlaceGaleria = await crearGaleriaPrivadaPedido(supabase, pedido);
+    const mensaje = crearMensajePedido(carrito, nombre, ciudad, enlaceGaleria);
     const enlaceWhatsApp = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
     ventanaWhatsApp.location.href = enlaceWhatsApp;
     mostrarConfirmacionPedido();

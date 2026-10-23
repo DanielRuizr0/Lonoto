@@ -1,4 +1,5 @@
 import { supabase } from '../js/supabaseClient.js';
+import { crearGaleriaPrivadaPedido, subirImagenGaleria } from '../js/galeriaPedido.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const loader = document.getElementById('loader-disenos');
@@ -45,6 +46,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (gridDisenos) {
       gridDisenos.style.display = 'grid';
       renderizarTarjetas(disenos, gridDisenos);
+      gridDisenos.querySelectorAll('.btn-pedir-diseno').forEach(boton => {
+        boton.addEventListener('click', () => {
+          const indice = Number.parseInt(boton.dataset.indice, 10);
+          pedirPorWhatsApp(disenos[indice], boton);
+        });
+      });
     }
 
   } catch (error) {
@@ -63,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function renderizarTarjetas(disenos, contenedor) {
   const imgFallback = 'https://via.placeholder.com/300x200/111/CCFF00?text=LONOTO+3D';
 
-  contenedor.innerHTML = disenos.map(diseno => {
+  contenedor.innerHTML = disenos.map((diseno, indice) => {
     const tieneCapturaValida = diseno.url_vista_previa_3d && diseno.url_vista_previa_3d.startsWith('data:image');
     const vistaPrevia = tieneCapturaValida ? diseno.url_vista_previa_3d : imgFallback;
     const config = diseno.configuracion_3d || {};
@@ -74,8 +81,6 @@ function renderizarTarjetas(disenos, contenedor) {
       month: 'short',
       day: 'numeric'
     });
-
-    const disenoJSON = JSON.stringify(diseno).replace(/"/g, '&quot;');
 
     return `
       <article class="card-bento card-clara">
@@ -97,7 +102,7 @@ function renderizarTarjetas(disenos, contenedor) {
         </div>
 
         <div style="display: flex; gap: 0.6rem; margin-top: auto;">
-          <button onclick="pedirPorWhatsApp('${disenoJSON}')" class="btn-lonoto btn-neon" style="flex: 1;">
+          <button class="btn-lonoto btn-neon btn-pedir-diseno" data-indice="${indice}" style="flex: 1;">
             PEDIR POR WHATSAPP
           </button>
           <button onclick="borrarDiseño('${diseno.id_diseno}')" class="btn-peligro" title="Eliminar prototipo">
@@ -109,26 +114,76 @@ function renderizarTarjetas(disenos, contenedor) {
   }).join('');
 }
 
-window.pedirPorWhatsApp = (disenoInput) => {
-  const diseno = typeof disenoInput === 'string' ? JSON.parse(disenoInput) : disenoInput;
-  const numeroTelefono = "573127557563";
-  const config = diseno.configuracion_3d || {};
-
-  let mensaje = `¡Hola LONOTO! 👋 Deseo pedir la fabricación de mi prototipo:\n\n`;
-  mensaje += `📌 *Nombre:* ${diseno.nombre_diseno}\n`;
-  mensaje += `🆔 *Referencia:* #${diseno.id_diseno}\n`;
-  mensaje += `🎨 *Color Base Media:* ${config.colorBase || 'Blanco'}\n\n`;
-
-  if (config.urlLogoHD) {
-    mensaje += `🖼️ *DESCARGAR LOGO ORIGINAL HD:*\n${config.urlLogoHD}\n\n`;
-  } else {
-    mensaje += `⚠️ *Nota:* Este diseño se creó solo con color base o la imagen no se subió a Storage.\n\n`;
+async function pedirPorWhatsApp(diseno, boton) {
+  const ventanaWhatsApp = window.open('about:blank', '_blank');
+  if (!ventanaWhatsApp) {
+    alert('Permite las ventanas emergentes para abrir WhatsApp y vuelve a intentarlo.');
+    return;
   }
 
-  mensaje += `Quedo atento para confirmar el valor total y método de envío.`;
+  ventanaWhatsApp.opener = null;
+  ventanaWhatsApp.document.title = 'Preparando pedido';
+  ventanaWhatsApp.document.body.textContent = 'Preparando la galería privada del pedido...';
+  boton.disabled = true;
 
-  window.open(`https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
-};
+  try {
+    const captura = diseno.url_vista_previa_3d;
+    if (typeof captura !== 'string' || !captura.startsWith('data:image/')) {
+      throw new Error('Este diseño no tiene una captura 3D guardada. Ábrelo en Diseño 3D y vuelve a guardarlo para poder pedirlo.');
+    }
+
+    const mime = captura.slice(5, captura.indexOf(';'));
+    const extensiones = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+    const extension = extensiones[mime];
+    if (!extension) throw new Error('La captura guardada debe ser JPG, PNG o WebP.');
+
+    const datos = captura.slice(captura.indexOf(',') + 1);
+    const bytes = Uint8Array.from(atob(datos), caracter => caracter.charCodeAt(0));
+    const archivo = new File([bytes], `modelo-${diseno.id_diseno}.${extension}`, { type: mime });
+    const galleryId = crypto.randomUUID();
+    const ruta = `${galleryId}/${crypto.randomUUID()}.${extension}`;
+    const path = await subirImagenGaleria(supabase, archivo, ruta);
+    const pedido = {
+      nombre: '',
+      ciudad: '',
+      total: 25000,
+      productos: [{
+        nombre: diseno.nombre_diseno || 'MEDIA PERSONALIZADA 3D',
+        precio: 25000,
+        cantidad: 1,
+        galeriaId: galleryId,
+        imagenes: [{ etiqueta: 'Vista principal del modelo 3D', ruta: path, galeriaId }]
+      }]
+    };
+    const enlaceGaleria = await crearGaleriaPrivadaPedido(supabase, pedido);
+    const config = diseno.configuracion_3d || {};
+
+    let mensaje = `¡Hola LONOTO! 👋 Deseo pedir la fabricación de mi prototipo:\n\n`;
+    mensaje += `📌 *Nombre:* ${diseno.nombre_diseno}\n`;
+    mensaje += `🆔 *Referencia:* #${diseno.id_diseno}\n`;
+    mensaje += `🎨 *Color Base Media:* ${config.colorBase || 'Blanco'}\n\n`;
+    mensaje += `🧦 *VER MODELO 3D Y FOTOS DEL PEDIDO:*\n${enlaceGaleria}\n\n`;
+
+    if (config.urlLogoHD) {
+      mensaje += `🖼️ *DESCARGAR LOGO ORIGINAL HD:*\n${config.urlLogoHD}\n\n`;
+    } else {
+      mensaje += `⚠️ *Nota:* Este diseño se creó solo con color base o la imagen no se subió a Storage.\n\n`;
+    }
+
+    mensaje += `Quedo atento para confirmar el valor total y método de envío.`;
+    const numeroTelefono = '573127557563';
+    ventanaWhatsApp.location.href =
+      `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+  } catch (error) {
+    console.error('No se pudo preparar la galería privada del diseño guardado:', error);
+    ventanaWhatsApp.close();
+    alert(error instanceof Error
+      ? `No se pudo preparar la galería privada: ${error.message}`
+      : 'No se pudo preparar la galería privada. Inténtalo de nuevo.');
+  } finally {
+    boton.disabled = false;
+  }
+}
 
 window.borrarDiseño = async (idDiseno) => {
   if (confirm('¿Estás seguro de que deseas eliminar este diseño de tu colección?')) {

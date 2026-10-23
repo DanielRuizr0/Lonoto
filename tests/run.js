@@ -7,6 +7,7 @@ import {
 } from '../js/logicaCarrito.js';
 import { crearConfiguracionDiseno, esPixelFondoBlanco } from '../js/disenoLogica.js';
 import { crearServicioDisenos } from '../js/disenosServiceLogic.js';
+import { crearGaleriaPrivadaPedido } from '../js/galeriaPedido.js';
 
 const resultados = document.getElementById('resultados');
 const pruebas = [];
@@ -159,6 +160,30 @@ probar('incluye un solo enlace a la galería privada sin exponer rutas de imáge
   afirmar(mensaje.includes(enlace), 'Debe compartir el enlace privado de la galería');
   afirmar(!mensaje.includes('private/modelo.jpg'), 'No debe incluir las rutas de almacenamiento');
   afirmar(mensaje.split(enlace).length === 2, 'Debe incluir una sola vez el enlace a la galería');
+});
+
+probar('crea una galería privada y devuelve su enlace con token', async () => {
+  const llamadas = [];
+  const supabase = {
+    functions: {
+      invoke: async (nombre, opciones) => {
+        llamadas.push({ nombre, opciones });
+        return { error: null };
+      }
+    }
+  };
+  const pedido = { nombre: '', ciudad: '', total: 25000, productos: [{ nombre: 'Media' }] };
+
+  const enlace = await crearGaleriaPrivadaPedido(supabase, pedido);
+  const llamada = llamadas[0];
+  const token = llamada.opciones.body.token;
+
+  afirmarIgual(llamada.nombre, 'pedido-galeria');
+  afirmarIgual(llamada.opciones.body.accion, 'crear');
+  afirmarIgual(llamada.opciones.body.pedido, pedido);
+  afirmar(/^[A-Za-z0-9_-]{43}$/.test(token), 'Debe generar un token seguro de 43 caracteres');
+  afirmar(enlace.includes('/paginas/galeria-pedido.html?token='), 'Debe devolver el enlace a la galería privada');
+  afirmar(enlace.endsWith(encodeURIComponent(token)), 'El enlace debe incluir el token generado');
 });
 
 probar('crea un saludo predeterminado para un carrito sin datos de envío', () => {
