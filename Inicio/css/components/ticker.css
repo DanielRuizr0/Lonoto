@@ -1,0 +1,39 @@
+/* --- COMPONENTE TICKER --- */
+.ticker {
+    background: var(--lime);
+    color: var(--asphalt);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 2px solid var(--asphalt);
+    border-bottom: 2px solid var(--asphalt);
+    position: relative;
+}
+
+.ticker-wrap {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.ticker-item span {
+    background: var(--asphalt);
+    color: var(--lime);
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+}

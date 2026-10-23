@@ -1,0 +1,177 @@
+/* --- COMPONENTE BENTO GRID --- */
+.bento-section {
+    padding: 80px 6vw;
+    background-color: var(--paper);
+}
+
+/* Grid exacta de 2 columnas */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    width: 100%;
+    align-items: stretch;
+}
+
+/* Tarjeta Bento Base */
+.bento-card {
+    background: var(--paper-2);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    transition: var(--transition);
+    box-shadow: 5px 5px 0px var(--ink);
+}
+
+.bento-card.dark {
+    background: var(--asphalt);
+    color: var(--paper);
+    border: 2px solid var(--asphalt-2);
+    box-shadow: 5px 5px 0px var(--asphalt-2);
+}
+
+/* Tipografías dentro de las tarjetas */
+.bento-card h2 {
+    font-family: 'Bungee', cursive;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.bento-card p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Ajustes de comparación de imágenes (Tarjeta Concepto) */
+.bento-comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin: 12px 0;
+}
+
+.bento-comparison-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.bento-comparison-item p {
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.bento-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+/* Endereza la imagen del muñequito girándola 90 grados */
+.bento-img-rotate {
+    transform: rotate(90deg) scale(0.65); /* Al escalar a 0.65 encaja perfecto sin cortarse arriba/abajo */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.bento-img-wrapper {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent; /* O el fondo claro de tu diseño */
+    border-radius: 6px;
+    padding: 4px;
+}
+
+/* Hace que la foto de la media aproveche más el alto */
+.bento-img-media {
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Etiquetas técnicas estilo código */
+.bento-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 16px;
+}
+
+.bento-card.dark .bento-tag {
+    color: var(--lime);
+}
+
+/* Tarjeta de Promoción Destacada */
+.bento-promo-card {
+    background: var(--lime) !important;
+    color: var(--asphalt) !important;
+    border: 3px solid var(--asphalt) !important;
+    box-shadow: 5px 5px 0px var(--magenta) !important;
+}
+
+.bento-promo-badge {
+    background: var(--asphalt);
+    color: var(--lime);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: 12px;
+}
+
+.btn-promo-bento {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--asphalt);
+    text-decoration: underline;
+    transition: var(--transition);
+}
+
+.btn-promo-bento:hover {
+    color: var(--magenta);
+    transform: translateX(5px);
+}
+
+/* Efectos Hover */
+.bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 8px 8px 0px var(--lime);
+}
+
+.bento-card.dark:hover {
+    box-shadow: 8px 8px 0px var(--lime);
+}
+
+/* Responsividad para móviles (se ajusta a 1 columna en pantallas pequeñas) */
+@media (max-width: 768px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+}

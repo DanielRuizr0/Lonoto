@@ -1,0 +1,36 @@
+.hero {
+    padding: 80px 5% 50px 5%;
+    text-align: left;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-block;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #ccff00; /* Verde neón de tus acentos */
+    background: rgba(204, 255, 0, 0.1);
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.hero h1 .accent {
+    color: #ff2a7a; /* Fucsia/Magenta vibrante de tu título */
+}
+
+.hero .sub {
+    font-size: 1.1rem;
+    color: #a0a0a0;
+    max-width: 600px;
+    line-height: 1.6;
+}

@@ -1,0 +1,10 @@
+.newsletter { background: var(--paper-2); color: var(--asphalt); padding: 120px 6vw; text-align: center; border-top: 2px solid var(--asphalt); }
+.newsletter h2 { font-size: 48px; margin-bottom: 20px; text-transform: uppercase; }
+.newsletter p { color: var(--muted); max-width: 50ch; margin: 0 auto 40px; font-size: 16px; }
+.newsletter-form { display: flex; max-width: 500px; margin: 0 auto; gap: 10px; }
+.newsletter-form input { flex: 1; padding: 16px; border-radius: 4px; border: 2px solid var(--asphalt); background: white; color: var(--ink); font-family: inherit; font-size: 15px; outline: none; }
+.newsletter-form input:focus { border-color: var(--magenta); }
+
+@media (max-width: 1024px) {
+    .newsletter-form { flex-direction: column; }
+}

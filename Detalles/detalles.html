@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles | Lonoto</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    
+    <!-- Fuente estilo marcador para el logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    
+    <!-- Enlaces a los CSS específicos dentro de la carpeta Detalles -->
+    <link rel="stylesheet" href="../Inicio/css/base.css">
+    <link rel="stylesheet" href="../Inicio/css/components/nav.css">
+    <link rel="stylesheet" href="../Inicio/css/components/hero.css">
+    <link rel="stylesheet" href="../Inicio/css/components/bento.css">
+    <link rel="stylesheet" href="../Inicio/css/components/footer.css">
+    <link rel="stylesheet" href="../Detalles/css/bento.css">
+    <link rel="stylesheet" href="../Detalles/css/hero.css">
+    <link rel="stylesheet" href="../css/carrito.css">
+</head>
+<body>
+
+    <!-- Modal del Carrito de Compras -->
+    <div id="modal-carrito" class="modal-overlay oculto">
+      <div class="modal-contenido card-bento card-clara modal-carrito-box">
+        <button id="cerrar-carrito" class="btn-cerrar">&times;</button>
+        
+        <span class="meta-tag">// TU_PEDIDO</span>
+        <h2 class="titulo-modal">CARRITO DE COMPRAS</h2>
+
+        <div id="lista-carrito" class="lista-carrito"></div>
+
+        <div class="datos-cliente">
+          <span class="meta-tag">// DATOS_ENVIO (OPCIONAL)</span>
+          <div class="inputs-grid">
+            <input type="text" id="cliente-nombre" class="input-lonoto" placeholder="Tu Nombre">
+            <input type="text" id="cliente-ciudad" class="input-lonoto" placeholder="Ciudad / Municipio">
+          </div>
+        </div>
+
+        <div class="resumen-carrito">
+          <div class="total-row">
+            <span>TOTAL:</span>
+            <span id="total-carrito" class="precio">$0 COP</span>
+          </div>
+
+          <a id="btn-whatsapp-carrito" href="#" target="_blank" class="btn-lonoto btn-neon btn-ws">
+            CONFIRMAR PEDIDO POR WHATSAPP
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo Bar -->
+    <div class="promo-bar">Nueva Colección Lonoto Disponible</div>
+
+    <!-- Navegación -->
+    <nav>
+        <a href="../Inicio/Pagina inicio.html" class="logo">
+            L<span class="underline-o">O</span>NOT<span class="underline-o">O</span>
+        </a>
+        
+        <div class="nav-links">
+            <a href="../Inicio/Pagina inicio.html">Inicio</a>
+            <a href="../Detalles/detalles.html" class="active">Detalles</a>
+            <a href="../diseño 3d/Diseño-3D.html">Diseño 3D</a>
+            <a href="../Catalago/catalago.html">Catálogo</a>
+            <a href="../Diseños/mis-disenos.html">Mis Diseños</a>
+            <button id="btn-abrir-carrito" class="btn-carrito-nav"> 
+                🛒 CARRITO (<span id="cart-count">0</span>)
+            </button>
+        </div>
+    </nav>
+
+    <!-- Encabezado de la página de Detalles -->
+    <header class="hero">
+        <div class="hero-badge">// DOCUMENTACIÓN_TÉCNICA</div>
+        <h1>Anatomía de la <span class="accent">Media.</span></h1>
+        <p class="sub">Desglose de componentes, arquitectura del tejido textil y lógica de ingeniería aplicada a nuestras prendas para los pies.</p>
+    </header>
+
+    <!-- Sección de Análisis del Producto (Bento Grid) -->
+    <section class="bento-section">
+        <div class="bento-grid">
+            
+            <!-- Tarjeta Principal del Producto -->
+            <div class="bento-card bento-large dark">
+                <h2>Media Técnica LONOTO V1</h2>
+                <p>// "En LONOTO no imprimimos sobre tela de forma convencional; compilamos patrones anatómicos bajo estándares de precisión técnica. Cada fibra sintética pro anti-desgarro es evaluada para soportar la fricción urbana, asegurando que tu identidad visual permanezca intacta ciclo tras ciclo."//
+                    "Nuestra arquitectura web integra un motor gráfico WebGL de alto rendimiento con persistencia en la nube mediante Supabase. Esto permite que la visualización tridimensional de tus medias ocurra a 60 FPS estables, transformando vectores digitales en indumentaria real con trazabilidad exacta."
+                </p>
+                <div class="bento-tag">// VISTA_PREVIA_3D</div>
+            </div>
+
+            <!-- Características -->
+            <div class="bento-card">
+                <h2>Soporte de Arco Plantar</h2>
+                <p>Banda elástica de compresión focalizada en el empeine que previene deslizamientos dentro del calzado y reduce el cansancio del pie.</p>
+                <div class="bento-tag">// AJUSTE_ANATÓMICO</div>
+            </div>
+
+            <div class="bento-card dark">
+                <h2>Puntera y Talón Reforzados</h2>
+                <p>Construcción de alta densidad en áreas de fricción con acabado seamless (sin costuras molestas) para prevenir ampollas y alargar la vida útil.</p>
+                <div class="bento-tag">// PROTECCIÓN_ANTI_IMPACTO</div>
+            </div>
+
+            <div class="bento-card dark bento-wide">
+                <h2>Malla Transpirable HD</h2>
+                <p>Canales de ventilación dinámica en la capellada y caña que facilitan la rápida evacuación del sudor, manteniendo el pie seco y fresco.</p>
+                <div class="bento-tag">// CONTROL_TÉRMICO_ACTIVO</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Lonoto. Todos los derechos reservados.</p>
+    </footer>
+    <!-- Cargar el carrito como módulo para que soporte Supabase y active los eventos -->
+<script type="module" src="../js/carrito.js"></script>
+</body>
+</html>

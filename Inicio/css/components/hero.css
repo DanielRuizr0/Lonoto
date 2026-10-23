@@ -1,0 +1,10 @@
+header.hero { background: var(--asphalt); color: var(--paper); padding: 120px 6vw 160px; text-align: center; position: relative; }
+.hero-badge { background: var(--asphalt-2); border: 1px solid var(--lime); color: var(--lime); display: inline-block; padding: 6px 16px; border-radius: 50px; font-size: 12px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1.5px; }
+header.hero h1 { font-size: 5vw; line-height: 1; margin-bottom: 30px; text-transform: uppercase; }
+header.hero h1 span.accent { color: var(--magenta); }
+header.hero p.sub { font-size: 20px; max-width: 65ch; margin: 0 auto 50px; color: var(--paper-2); }
+.hero-ctas { display: flex; justify-content: center; gap: 20px; }
+
+@media (max-width: 1024px) {
+    header.hero h1 { font-size: 40px; }
+}

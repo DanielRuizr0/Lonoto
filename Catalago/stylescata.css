@@ -1,0 +1,134 @@
+/* ==========================================
+   VARIABLES Y ESTILOS GLOBALES
+=========================================== */
+:root {
+  --bg-dark: #141414;
+  --bg-light: #EFECE6;
+  --neon-green: #CCFF00;
+  --accent-pink: #FF3B8B;
+  --border-black: #000000;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ==========================================
+   SECCIÓN DEL CATÁLOGO & GRID
+=========================================== */
+.catalogo-seccion {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.header-catalogo {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.badge-tag {
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.titulo-catalogo {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 1.5rem 0;
+  letter-spacing: 1px;
+}
+
+.texto-rosa {
+  color: var(--accent-pink);
+}
+
+.grid-catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card-producto {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-bento {
+  border: 2px solid var(--border-black);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 5px 5px 0px var(--border-black);
+}
+
+.card-clara {
+  background-color: var(--bg-light);
+  color: #000;
+}
+
+.thumb-placeholder {
+  width: 100%;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.thumb-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.thumb-placeholder .img-media-ampliada {
+  transform: scale(1.4);
+}
+
+.thumb-placeholder .img-media-letra-t {
+  transform: translate(8px, 28px) scale(1.4);
+}
+
+.meta-tag {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #777;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.precio {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.btn-lonoto {
+  width: 100%;
+  padding: 0.8rem;
+  font-weight: 900;
+  border: 2px solid var(--border-black);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform 0.1s ease;
+  box-sizing: border-box;
+}
+
+.btn-neon {
+  background-color: var(--neon-green);
+  color: #000;
+}
+
+.btn-lonoto:hover {
+  transform: translate(-2px, -2px);
+}

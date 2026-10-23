@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lonoto | Ingeniería Textil & Personalización 3D</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@700&family=Bungee&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/carrito.css">
+</head>
+<body>
+
+    <!-- Modal del Carrito de Compras -->
+    <div id="modal-carrito" class="modal-overlay oculto">
+      <div class="modal-contenido card-bento card-clara modal-carrito-box">
+        <button id="cerrar-carrito" class="btn-cerrar">&times;</button>
+        
+        <span class="meta-tag">// TU_PEDIDO</span>
+        <h2 class="titulo-modal">CARRITO DE COMPRAS</h2>
+
+        <div id="lista-carrito" class="lista-carrito"></div>
+
+        <div class="datos-cliente">
+          <span class="meta-tag">// DATOS_ENVIO (OPCIONAL)</span>
+          <div class="inputs-grid">
+            <input type="text" id="cliente-nombre" class="input-lonoto" placeholder="Tu Nombre">
+            <input type="text" id="cliente-ciudad" class="input-lonoto" placeholder="Ciudad / Municipio">
+          </div>
+        </div>
+
+        <div class="resumen-carrito">
+          <div class="total-row">
+            <span>TOTAL:</span>
+            <span id="total-carrito" class="precio">$0 COP</span>
+          </div>
+
+          <a id="btn-whatsapp-carrito" href="#" target="_blank" class="btn-lonoto btn-neon btn-ws">
+            CONFIRMAR PEDIDO POR WHATSAPP
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo Bar (Barra Publicitaria Superior Interactiva) -->
+    <div class="promo-bar">
+        <span class="promo-tag">¡LOTE LIMITADO!</span> 
+        🔥 ENVÍOS GRATIS EN COLOMBIA POR PEDIDOS MAYORES A 3 UNIDADES PERSONALIZADAS 
+        <a href="../diseño 3d/Diseño-3D.html" class="promo-link">PERSONALIZAR ➔</a>
+    </div>
+
+    <!-- Navegación -->
+    <nav>
+        <a href="Pagina inicio.html" class="logo">
+            L<span class="underline-o">O</span>NOT<span class="underline-o">O</span>
+        </a>
+        
+        <div class="nav-links">
+            <a href="Pagina inicio.html" class="active">Inicio</a>
+            <a href="../Detalles/detalles.html">Detalles</a>
+            <a href="../diseño 3d/Diseño-3D.html">Diseño 3D</a>
+            <a href="../Catalago/catalago.html">Catálogo</a>
+            <a href="../Diseños/mis-disenos.html">Mis Diseños</a>
+            <button id="btn-abrir-carrito" class="btn-carrito-nav">
+                🛒 CARRITO (<span id="cart-count">0</span>)
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section con Anuncio Publicitario Destacado -->
+    <header class="hero">
+        <div class="hero-badge">⚡CALCETIN EDICIÓN LIMITADA  </div>
+        <h1>Ingeniería aplicada <span class="accent">al diseño.</span></h1>
+        <div class="hero-ctas">
+            <a href="../diseño 3d/Diseño-3D.html" class="btn btn-primary">🎨 Pruebame</a>
+            <a href="../Catalago/catalago.html" class="btn btn-secondary">Ver Catálogo</a>
+        </div>
+    </header>
+
+    <!-- Ticker Publicitario -->
+    <div class="ticker">
+        <div class="ticker-wrap">
+            <div class="ticker-item"><span>01</span> Calidad Industrial</div>
+            <div class="ticker-item"><span>02</span> Visor WebGL 3D</div>
+            <div class="ticker-item"><span>03</span> Producción Local</div>
+            <div class="ticker-item"><span>04</span> Envío a Toda Colombia</div>
+        </div>
+    </div>
+
+    <!-- Manifesto -->
+    <section class="manifesto">
+        <div class="graffiti-tag">LONOTO</div>
+        <div class="manifesto-content">
+            <h2>No es solo ropa, es arquitectura textil.</h2>
+            <p>// TU LOGO + NUESTRO CHASIS 3D = ESTILO ÚNICO</p>
+        </div>
+    </section>
+
+    <!-- Bento Grid con Tarjeta Publicitaria -->
+    <!-- Bento Grid con Tarjeta Publicitaria (4 tarjetas en 2x2) -->
+<section class="bento-section">
+    <div class="bento-grid">
+        
+        <!-- Tarjeta 1: Concepto -->
+    <div class="bento-card">
+        <h2>Concepto</h2>
+        <div class="bento-comparison-grid">
+            <div class="bento-comparison-item">
+                <p>Lo que nos entregas</p>
+                <div class="bento-img-wrapper">
+                    <img src="./test.jpg" alt="Diseño del muñequito" class="bento-img bento-img-rotate">
+                </div>
+            </div>
+
+            <div class="bento-comparison-item">
+                <p>Lo que te entregamos</p>
+                <div class="bento-img-wrapper">
+                    <img src="./WhatsApp Image 2026-10-16 at 4.37.35 PM.jpeg" alt="Media con diseño bordado" class="bento-img bento-img-media">
+                </div>
+            </div>
+        </div>
+        <div class="bento-tag">// BASE_01</div>
+    </div>
+        
+        <!-- Tarjeta 2: Materiales -->
+        <div class="bento-card dark">
+            <h2>Materiales</h2>
+            <p>Componentes textiles de alta durabilidad para uso intensivo. Integramos tejidos técnicos de última generación que resisten el día a día.</p>
+            <div class="bento-tag">// RESISTENCIA</div>
+        </div>
+        
+        <!-- Tarjeta 3: Promo B2B -->
+        <div class="bento-card bento-promo-card">
+            <span class="bento-promo-badge">PROMO B2B / GRUPOS</span>
+            <h2>¿Necesitas Medias para tu Marca o Equipo?</h2>
+            <p>Fabricamos lotes personalizados a partir de 12 unidades con descuentos exclusivos y render 3D de muestra gratis.</p>
+            <a href="https://wa.me/573127557563?text=%C2%A1Hola%20LONOTO!%20Deseo%20cotizar%20un%20lote%20personalizado%20para%20mi%20marca." target="_blank" class="btn-promo-bento">Cotizar por WhatsApp ➔</a>
+        </div>
+        
+        <!-- Tarjeta 4: Precisión del Código -->
+        <div class="bento-card dark">
+            <h2>Precisión del Código</h2>
+            <p>Diseñado bajo patrones modulares. Replicamos la lógica de la arquitectura de software en el patronaje textil para compilar un ajuste perfecto.</p>
+            <div class="bento-tag">// CODIGO CALLE</div>
+        </div>
+
+    </div>
+</section>
+
+    <!-- Tech Specs -->
+    <section class="tech-specs">
+        <div class="specs-header">
+            <span class="specs-tag">// FICHA_TECNICA_v2.1</span>
+            <h2>Especificaciones Técnicas</h2>
+        </div>
+        
+        <div class="specs-grid">
+            <div class="spec-item">
+                <span class="spec-num">01</span>
+                <h3>CHASIS TEXTIL</h3>
+                <p>Patrón modular anatómico de alta precisión.</p>
+            </div>
+            
+            <div class="spec-item">
+                <span class="spec-num">02</span>
+                <h3>MATERIAL</h3>
+                <p>Fibra Sintética Pro anti-desgarro.</p>
+            </div>
+            
+            <div class="spec-item">
+                <span class="spec-num">03</span>
+                <h3>TRACCIÓN</h3>
+                <p>Compuesto de agarre V2 para movilidad urbana.</p>
+            </div>
+            
+            <div class="spec-item">
+                <span class="spec-num">04</span>
+                <h3>SELLADO</h3>
+                <p>Termosellado de alta frecuencia en costuras.</p>
+            </div>
+            
+            <div class="spec-item">
+                <span class="spec-num">05</span>
+                <h3>RESISTENCIA</h3>
+                <p>Impermeabilidad 10K / Alta transpirabilidad.</p>
+            </div>
+            
+            <div class="spec-item">
+                <span class="spec-num">06</span>
+                <h3>DESPLIEGUE</h3>
+                <p>Lote limitado bajo demanda local.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <h2>Preguntas Frecuentes</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3><span>01.</span> ¿Cómo funciona la personalización 3D?</h3>
+                <p>Entras al editor 3D, cambias el color base, subes tu logo (PNG/JPG) y nuestro sistema remueve el fondo automáticamente para proyectarlo en la media.</p>
+            </div>
+            <div class="faq-item">
+                <h3><span>02.</span> ¿Hacen envíos a todo el país?</h3>
+                <p>Sí, enviamos a toda Colombia. El tiempo de producción y entrega es de 3 a 5 días hábiles.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <h2>Únete al laboratorio</h2>
+        <p>Suscríbete para recibir lanzamientos de lotes exclusivos y códigos de descuento en ropa personalizada.</p>
+        <form id="lead-form" class="newsletter-form" action="#" method="POST">
+            <input type="email" name="email" placeholder="Ingresa tu correo" required>
+            <button type="submit" class="btn btn-primary">Suscribirse</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Lonoto. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

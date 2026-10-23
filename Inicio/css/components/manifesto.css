@@ -1,0 +1,51 @@
+/* --- COMPONENTE MANIFESTO --- */
+.manifesto {
+    background-color: var(--magenta);
+    position: relative;
+    padding: 100px 6vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    border-bottom: 2px solid var(--asphalt);
+}
+
+/* El texto de fondo grande (Efecto marca de agua / grafiti) */
+.manifesto .graffiti-tag {
+    position: absolute;
+    font-family: 'Permanent Marker', cursive;
+    font-size: clamp(80px, 18vw, 220px);
+    color: rgba(255, 255, 62, 0.25); /* Amarillo translúcido para que no sature */
+    white-space: nowrap;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    transform: rotate(-4deg);
+}
+
+/* El contenido que va al frente */
+.manifesto-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.manifesto-content h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 700;
+    color: var(--paper);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.manifesto-content p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--lime);
+    letter-spacing: 2px;
+    font-weight: 700;
+}

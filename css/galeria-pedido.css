@@ -1,0 +1,124 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+}
+
+.gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 6vw;
+  background: var(--asphalt);
+  border-bottom: 1px solid var(--asphalt-2);
+}
+
+.gallery-logo {
+  color: white;
+  font: 32px 'Permanent Marker', cursive;
+  letter-spacing: 2px;
+}
+
+.gallery-private {
+  color: var(--lime);
+  font-size: 12px;
+}
+
+.gallery-main {
+  width: min(1100px, 100%);
+  flex: 1;
+  margin: 0 auto;
+  padding: 56px 24px;
+}
+
+.gallery-status {
+  padding: 20px;
+  border: 2px solid var(--asphalt);
+  background: white;
+}
+
+.gallery-status.error {
+  border-color: var(--magenta);
+  color: #9c174d;
+}
+
+.gallery-heading {
+  margin-bottom: 32px;
+}
+
+.gallery-heading h1 {
+  margin: 12px 0;
+  font: 36px 'Bungee', sans-serif;
+}
+
+.gallery-heading p,
+.gallery-order-summary {
+  color: #555;
+}
+
+.gallery-product {
+  margin-top: 28px;
+  padding: 24px;
+  background: white;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.gallery-product h2 {
+  margin-bottom: 18px;
+  font: 22px 'Bungee', sans-serif;
+}
+
+.gallery-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.gallery-image {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #d5d0c5;
+  background: #f7f5ef;
+}
+
+.gallery-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #17181a;
+}
+
+.gallery-image figcaption {
+  padding: 10px 12px;
+  font: 12px 'JetBrains Mono', monospace;
+}
+
+.gallery-footer {
+  padding: 20px 6vw;
+  color: var(--paper-2);
+  background: #111213;
+  text-align: center;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .gallery-header {
+    padding: 16px 5vw;
+  }
+
+  .gallery-main {
+    padding: 32px 16px;
+  }
+
+  .gallery-heading h1 {
+    font-size: 28px;
+  }
+
+  .gallery-product {
+    padding: 16px;
+  }
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lonoto | Laboratorio de Diseños 3D</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+
+  <!-- Tipografías Oficiales Lonoto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Permanent+Marker&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Hojas de Estilos Sincronizadas -->
+  <link rel="stylesheet" href="../Inicio/css/base.css">
+  <link rel="stylesheet" href="../Diseños/stylesmisdisenos.css">
+  <link rel="stylesheet" href="../Inicio/css/components/nav.css">
+  <link rel="stylesheet" href="../css/carrito.css">
+</head>
+<body>
+
+  <!-- Promo Bar Superior -->
+  <div class="promo-bar">
+    <span class="promo-tag">GALERÍA TÉCNICA</span> 
+    PROTOTIPOS GUARDADOS EN LA NUBE // LISTOS PARA PRODUCCIÓN EN COLOMBIA
+  </div>
+
+  <nav>
+    <a href="../Inicio/Pagina inicio.html" class="logo">
+      L<span class="underline-o">O</span>NOT<span class="underline-o">O</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="../Inicio/Pagina inicio.html">Inicio</a>
+      <a href="../Detalles/detalles.html">Detalles</a>
+      <a href="../diseño 3d/Diseño-3D.html">Diseño 3D</a>
+      <a href="../Catalago/catalago.html">Catálogo</a>
+      <a href="mis-disenos.html" class="active">Mis Diseños</a>
+      <button id="btn-abrir-carrito" class="btn-carrito-nav">
+        🛒 CARRITO (<span id="cart-count">0</span>)
+      </button>
+    </div>
+  </nav>
+
+  <!-- Sección Principal: Galería de Diseños Guardados -->
+  <main class="catalogo-seccion">
+    <header class="header-catalogo-tech">
+      <div class="header-info">
+        <span class="badge-tag">// ARCHIVO_DE_PROTOTIPOS</span>
+        <h1 class="titulo-catalogo">LABORATORIO DE <span class="texto-rosa">DISEÑOS</span> 3D</h1>
+        <p class="desc-header">
+          Gestiona tus modelos guardados en la nube, vuelve a editarlos en el visor 3D o agrégalos directamente al carrito para enviarlos a fabricación.
+        </p>
+      </div>
+
+      <div class="stats-badge-box">
+        <span class="badge-label">ESTADO DE ARCHIVO</span>
+        <div class="badge-count"><span id="total-disenos-count">0</span> PROTOTIPOS</div>
+      </div>
+    </header>
+
+    <!-- Indicador de Carga Neo-Brutalista -->
+    <div id="loader-disenos" class="loader-box">
+      <span class="badge-tag pulse-animation">// CONECTANDO CON SUPABASE</span>
+      <p class="loader-text">Recuperando tus prototipos personalizados desde la nube...</p>
+    </div>
+
+    <!-- Estado Vacío (Sin Diseños) Gráfico -->
+    <div id="mensaje-vacio" class="empty-state-card card-bento card-clara" style="display: none;">
+      <div class="empty-icon-wrapper">🧦</div>
+      <h2 class="empty-title">AÚN NO HAS CREADO NINGÚN DISEÑO</h2>
+      <p class="empty-desc">Visita nuestro estudio interactivo 3D para personalizar tu primera media, ajustar colores, subir tu logo y guardarla en tu cuenta.</p>
+      <a href="../diseño 3d/Diseño-3D.html" class="btn-lonoto btn-neon mt-20">
+        🎨 CREAR MI PRIMER DISEÑO 3D
+      </a>
+    </div>
+
+    <!-- Grid Bento de Tarjetas (Renderizado Dinámico desde JS) -->
+    <div id="grid-disenos" class="grid-catalogo" style="display: none;">
+      <!-- Las tarjetas cargadas desde Supabase se inyectarán aquí -->
+    </div>
+  </main>
+
+  <!-- Modal del Carrito de Compras -->
+  <div id="modal-carrito" class="modal-overlay oculto">
+    <div class="modal-contenido card-bento card-clara modal-carrito-box">
+      <button id="cerrar-carrito" class="btn-cerrar">&times;</button>
+      
+      <span class="meta-tag">// TU_PEDIDO</span>
+      <h2 class="titulo-modal">CARRITO DE COMPRAS</h2>
+
+      <div id="lista-carrito" class="lista-carrito"></div>
+
+      <div class="datos-cliente">
+        <span class="meta-tag">// DATOS_ENVIO (OPCIONAL)</span>
+        <div class="inputs-grid">
+          <input type="text" id="cliente-nombre" class="input-lonoto" placeholder="Tu Nombre">
+          <input type="text" id="cliente-ciudad" class="input-lonoto" placeholder="Ciudad / Municipio">
+        </div>
+      </div>
+
+      <div class="resumen-carrito">
+        <div class="total-row">
+          <span>TOTAL:</span>
+          <span id="total-carrito" class="precio">$0 COP</span>
+        </div>
+
+        <a id="btn-whatsapp-carrito" href="#" target="_blank" class="btn-lonoto btn-neon btn-ws">
+          CONFIRMAR PEDIDO POR WHATSAPP
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lógica en JavaScript para cargar y renderizar los diseños -->
+  <script type="module" src="../Diseños/misDisenos.js"></script>
+  <script type="module" src="../js/carrito.js"></script>
+
+  <footer>
+    <p class="mono">&copy; 2026 Lonoto. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>

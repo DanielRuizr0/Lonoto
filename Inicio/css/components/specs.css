@@ -1,0 +1,10 @@
+.tech-specs { padding: 100px 6vw; background: var(--asphalt); color: white; border-top: 2px solid var(--lime); border-bottom: 2px solid var(--lime); }
+.specs-header { margin-bottom: 60px; }
+.specs-header h2 { font-size: 48px; color: var(--lime); text-transform: uppercase; }
+.specs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; border-top: 1px solid var(--asphalt-2); padding-top: 40px; }
+.spec-item h3 { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--magenta); margin-bottom: 10px; }
+.spec-item p { font-size: 15px; color: var(--paper-2); }
+
+@media (max-width: 1024px) {
+    .specs-grid { grid-template-columns: 1fr; }
+}

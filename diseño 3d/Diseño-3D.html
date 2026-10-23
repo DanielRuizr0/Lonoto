@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lonoto | Personalizador de Medias 3D</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+
+  <!-- Fuentes Oficiales Lonoto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Permanent+Marker&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Hoja de Estilos Externa -->
+  <link rel="stylesheet" href="../Inicio/css/base.css">
+  <link rel="stylesheet" href="../Inicio/css/components/nav.css">
+  <link rel="stylesheet" href="../diseño 3d/stylesdise.css">
+  <link rel="stylesheet" href="../css/carrito.css">
+
+  <!-- Librerías 3D (Three.js & Plugins) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+
+  <!-- Barra Promocional -->
+  <div class="promo-bar">Laboratorio 3D // Configuración de prototipos</div>
+
+  <!-- Navegación Lonoto -->
+  <nav>
+    <a href="../Inicio/Pagina inicio.html" class="logo">
+      L<span class="underline-o">O</span>NOT<span class="underline-o">O</span>
+    </a>
+    <div class="nav-links">
+      <a href="../Inicio/Pagina inicio.html">Inicio</a>
+      <a href="../Detalles/detalles.html">Detalles</a>
+      <a href="#" class="active">Diseño 3D</a>
+      <a href="../Catalago/catalago.html">Catálogo</a>
+      <a href="../Diseños/mis-disenos.html">Mis Diseños</a>
+      
+      <button id="btn-abrir-carrito" class="btn-carrito-nav">
+        🛒 CARRITO (<span id="cart-count">0</span>)
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-grid">
+    <!-- Viewport 3D -->
+    <div class="viewport-container">
+      <div class="view-badge mono">// VISTA_INTERACTIVA_360°</div>
+      <div id="loaderOverlay" class="mono">
+        <div class="spinner"></div>
+        <div>CARGANDO CHASIS 3D...</div>
+      </div>
+      <div id="threeContainer"></div>
+    </div>
+
+    <!-- Panel de Control -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-badge mono">// ESTUDIO_CUSTOM_v2.1</div>
+        <h1 class="display">CONFIGURA TU MEDIA</h1>
+        <p class="tagline">Personaliza el chasis textil y aplica estampados vectoriales en tiempo real.</p>
+      </div>
+
+      <!-- Color Base -->
+      <div class="control-group">
+        <h3 class="mono"><span>COLOR BASE</span> <span>[01]</span></h3>
+        <div class="color-grid" id="colorPicker">
+          <button class="color-btn active" style="background: #ffffff;" data-color="#ffffff" title="Blanco"></button>
+          <button class="color-btn" style="background: #111214;" data-color="#111214" title="Negro"></button>
+          <button class="color-btn" style="background: #6d0409;" data-color="#6d0409" title="Rojo oscuro"></button>
+          <button class="color-btn" style="background: #05084a;" data-color="#05084a" title="Azul oscuro"></button>
+          <button class="color-btn" style="background: #4A154B;" data-color="#4A154B" title="Morado"></button>
+        </div>
+      </div>
+
+      <!-- Carga de Imagen -->
+      <div class="control-group">
+        <h3 class="mono"><span>ESTAMPADO / LOGO</span> <span>[02]</span></h3>
+        <div class="file-upload-wrapper">
+          <label for="imageLoader" class="file-upload-btn mono">CARGAR TU IMAGEN (.PNG / .JPG)</label>
+          <input type="file" id="imageLoader" accept="image/*">
+        </div>
+
+        <div class="checkbox-wrapper">
+          <label class="switch">
+            <input type="checkbox" id="removeBgCheck" checked>
+            <span class="slider"></span>
+          </label>
+          <span class="mono" style="font-size:0.8rem; font-weight:700;">FILTRAR FONDO BLANCO</span>
+        </div>
+
+        <div class="checkbox-wrapper">
+          <label class="switch">
+            <input type="checkbox" id="duplicateImageCheck">
+            <span class="slider"></span>
+          </label>
+          <span class="mono" style="font-size:0.8rem; font-weight:700;">DUPLICAR AL FRENTE Y ATRÁS</span>
+        </div>
+
+        <div class="slider-box" id="toleranceContainer" style="margin-top:1.2rem;">
+          <label class="mono">Sensibilidad de Recorte <span id="tolVal">40</span></label>
+          <input type="range" id="bgTolerance" min="1" max="150" value="40">
+        </div>
+      </div>
+
+      <!-- Controles Vectoriales -->
+      <div class="control-group">
+        <h3 class="mono"><span>POSICIÓN Y ESCALA</span> <span>[03]</span></h3>
+        
+        <div class="slider-box">
+          <label class="mono">Escala <span id="scaleVal">80%</span></label>
+          <input type="range" id="imgScale" min="100" max="200" value="80">
+        </div>
+
+        <div class="slider-box">
+          <label class="mono">Eje Y (Vertical) <span id="xVal">50%</span></label>
+          <input type="range" id="imgPosX" min="35" max="80" value="50">
+        </div>
+
+        <div class="slider-box">
+          <label class="mono">Eje X (Horizontal) <span id="yVal">50%</span></label>
+          <input type="range" id="imgPosY" min="5" max="120" value="50">
+        </div>
+
+        <div class="slider-box">
+          <label class="mono">Rotación <span id="rotVal">0°</span></label>
+          <input type="range" id="imgRot" min="0" max="360" value="0">
+        </div>
+      </div>
+
+      <!-- Botones de Acción Principal -->
+      <button class="btn-primary" id="addToCartBtn">Añadir al Carrito ($25.000 COP)</button>
+      <button class="btn-primary" id="btnGuardarDiseño" style="margin-top: 12px; background: var(--paper-2, #E2DCCC); color: var(--ink, #1C1B19); border-color: var(--paper-2, #E2DCCC);">
+        💾 GUARDAR DISEÑO EN MI CUENTA
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal del Carrito de Compras -->
+  <div id="modal-carrito" class="modal-overlay oculto">
+    <div class="modal-contenido card-bento card-clara modal-carrito-box">
+      <button id="cerrar-carrito" class="btn-cerrar">&times;</button>
+      
+      <span class="meta-tag">// TU_PEDIDO</span>
+      <h2 class="titulo-modal">CARRITO DE COMPRAS</h2>
+
+      <div id="lista-carrito" class="lista-carrito"></div>
+
+      <div class="datos-cliente">
+        <span class="meta-tag">// DATOS_ENVIO (OPCIONAL)</span>
+        <div class="inputs-grid">
+          <input type="text" id="cliente-nombre" class="input-lonoto" placeholder="Tu Nombre">
+          <input type="text" id="cliente-ciudad" class="input-lonoto" placeholder="Ciudad / Municipio">
+        </div>
+      </div>
+
+      <div class="resumen-carrito">
+        <div class="total-row">
+          <span>TOTAL:</span>
+          <span id="total-carrito" class="precio">$0 COP</span>
+        </div>
+
+        <a id="btn-whatsapp-carrito" href="#" target="_blank" class="btn-lonoto btn-neon btn-ws">
+          CONFIRMAR PEDIDO POR WHATSAPP
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="mono">&copy; 2026 Lonoto. Todos los derechos reservados.</p>
+  </footer>
+
+  <canvas id="textureCanvas" width="1024" height="1024"></canvas>
+
+ <!-- Scripts del Sistema -->
+  <script type="module" src="../js/carrito.js"></script>
+  <script type="module" src="../diseño 3d/script.js"></script>
+
+  <script type="module">
+    import { guardarDiseñoActual, cargarDiseñoEnEscena, subirImagenStorage } from './disenosService.js';
+
+    let archivoImagenSeleccionado = null;
+
+    // Exponer la función de subida al objeto global window para que script.js la utilice
+    window.subirArchivoStorageGlobal = async function(file) {
+      return await subirImagenStorage(file);
+    };
+
+    const inputImagen = document.getElementById('imageLoader');
+    if (inputImagen) {
+      inputImagen.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          archivoImagenSeleccionado = e.target.files[0];
+          window.archivoImagenActualGlobal = archivoImagenSeleccionado;
+        }
+      });
+    }
+
+    const btnGuardar = document.getElementById('btnGuardarDiseño');
+
+    if (btnGuardar) {
+      btnGuardar.addEventListener('click', async () => {
+        const nombre = prompt('Ingresa un nombre para tu diseño:', 'Mi Media Personalizada Lonoto');
+        if (!nombre) return;
+
+        btnGuardar.disabled = true;
+        const textoOriginal = btnGuardar.innerText;
+        btnGuardar.innerText = 'GUARDANDO Y SUBIENDO ARCHIVOS...';
+
+        const captura3D = window.tomarCaptura3D ? window.tomarCaptura3D() : null;
+        const config3D = window.obtenerConfiguracionActual ? window.obtenerConfiguracionActual() : {};
+
+        if (archivoImagenSeleccionado) {
+          btnGuardar.innerText = 'SUBIENDO GRÁFICO ORIGINAL...';
+          const urlLogoHD = await subirImagenStorage(archivoImagenSeleccionado);
+          
+          if (urlLogoHD) {
+            config3D.urlLogoHD = urlLogoHD;
+            window.ultimoLogoHDSubido = urlLogoHD;
+          } else {
+            alert('⚠️ Atención: El diseño se guardará, pero no se pudo subir el logo en HD a Storage.');
+          }
+        }
+
+        const resultado = await guardarDiseñoActual(nombre, config3D, captura3D);
+
+        btnGuardar.disabled = false;
+        btnGuardar.innerText = textoOriginal;
+
+        if (resultado) {
+          archivoImagenSeleccionado = null;
+        }
+      });
+    }
+
+    window.addEventListener('load', () => {
+      const disenoGuardado = sessionStorage.getItem('diseno_a_cargar');
+      if (disenoGuardado) {
+        try {
+          const diseno = JSON.parse(disenoGuardado);
+          sessionStorage.removeItem('diseno_a_cargar');
+          setTimeout(() => {
+            cargarDiseñoEnEscena(diseno);
+          }, 1000);
+        } catch (err) {
+          console.error('Error al reconstruir el diseño guardado:', err);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

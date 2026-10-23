@@ -1,0 +1,266 @@
+body { 
+  background: var(--paper); 
+  color: var(--ink); 
+  font-family: 'Space Grotesk', sans-serif; 
+  line-height: 1.6; 
+  overflow-x: hidden; 
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  min-height: calc(100vh - 105px);
+}
+
+/* --- ÁREA 3D (IZQUIERDA) --- */
+.viewport-container {
+  background: #111214; 
+  position: relative;
+  border-right: 2px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+#threeContainer {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.view-badge {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: var(--lime);
+  color: var(--asphalt);
+  padding: 0.4rem 0.8rem;
+  border: 2px solid var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 10;
+  letter-spacing: 1px;
+}
+
+/* Loader Overlay */
+#loaderOverlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: #111214;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  color: #fff;
+}
+
+.spinner {
+  width: 44px; height: 44px;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top: 4px solid var(--lime);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin { 
+  0% { transform: rotate(0deg); } 
+  100% { transform: rotate(360deg); } 
+}
+
+/* --- PANEL DE CONTROL ESTILO BENTO (DERECHA) --- */
+.panel {
+  padding: 2.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 105px);
+  background: var(--paper);
+}
+
+.panel-header {
+  margin-bottom: 2rem;
+}
+
+.panel-badge {
+  font-size: 11px;
+  color: var(--magenta);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
+}
+
+.panel h1 { 
+  font-size: 2.2rem; 
+  margin-bottom: 0.4rem; 
+  line-height: 1; 
+  text-transform: uppercase; 
+}
+
+.tagline { 
+  color: var(--muted); 
+  font-size: 0.95rem; 
+}
+
+/* Secciones Estilo Bento */
+.control-group {
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0px var(--ink);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.8rem;
+  transition: var(--transition);
+}
+
+.control-group:hover {
+  box-shadow: 6px 6px 0px var(--lime);
+}
+
+.control-group h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Selector de Colores */
+.color-grid { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 0.8rem; 
+}
+
+.color-btn {
+  width: 38px; height: 38px;
+  border-radius: 4px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.color-btn:hover { 
+  transform: translateY(-2px); 
+}
+
+.color-btn.active { 
+  border-color: var(--magenta); 
+  outline: 2px solid var(--magenta);
+  transform: scale(1.05); 
+}
+
+/* Input file personalizado */
+.file-upload-wrapper { 
+  position: relative; 
+  width: 100%; 
+}
+
+.file-upload-btn {
+  display: block; width: 100%; text-align: center;
+  background: var(--asphalt); color: var(--paper);
+  padding: 0.9rem; border-radius: 4px;
+  font-weight: 700; cursor: pointer;
+  border: 2px solid var(--asphalt);
+  transition: var(--transition);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.file-upload-btn:hover { 
+  background: transparent; 
+  color: var(--asphalt);
+}
+
+.file-upload-wrapper input[type="file"] {
+  position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+}
+
+/* Sliders Brutalistas */
+.slider-box { margin-bottom: 1rem; }
+.slider-box:last-child { margin-bottom: 0; }
+
+.slider-box label {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; text-transform: uppercase;
+  margin-bottom: 0.4rem; color: var(--ink);
+  font-weight: 700;
+}
+
+input[type="range"] {
+  width: 100%; appearance: none; -webkit-appearance: none; background: var(--paper);
+  height: 8px; border-radius: 0px; outline: none;
+  border: 1px solid var(--ink);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px;
+  border-radius: 0px; background: var(--lime); cursor: pointer;
+  border: 2px solid var(--ink); transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover { 
+  transform: scale(1.1); 
+}
+
+/* Switch / Checkbox Estilizado */
+.checkbox-wrapper { display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem; }
+.switch {
+  position: relative; display: inline-block; width: 44px; height: 24px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--asphalt); transition: .3s; border-radius: 2px;
+  border: 2px solid var(--ink);
+}
+.slider:before {
+  position: absolute; content: ""; height: 12px; width: 12px; left: 4px; bottom: 4px;
+  background-color: var(--paper); transition: .3s; border-radius: 0px;
+}
+input:checked + .slider { background-color: var(--lime); }
+input:checked + .slider:before { 
+  transform: translateX(20px); 
+  background-color: var(--asphalt);
+}
+
+/* Canvas 2D Oculto */
+#textureCanvas { display: none; }
+
+/* Botón Principal */
+.btn-primary {
+  display: block; width: 100%; background: var(--lime);
+  color: var(--asphalt); border: 2px solid var(--ink);
+  padding: 1.1rem; text-align: center; font-weight: 700;
+  font-size: 1rem; text-transform: uppercase; cursor: pointer;
+  box-shadow: 4px 4px 0px var(--ink); transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+.btn-primary:hover { 
+  background: transparent; 
+  color: var(--ink); 
+  transform: translateY(-3px);
+  box-shadow: 6px 6px 0px var(--ink); 
+}
+
+/* Footer Lonoto */
+footer {
+  background: #111213;
+  color: var(--paper-2);
+  text-align: center;
+  padding: 20px 6vw;
+  border-top: 1px solid var(--asphalt-2);
+  font-size: 12px;
+}
+
+/* Adaptación Responsive */
+@media(max-width: 900px){
+  .main-grid { grid-template-columns: 1fr; }
+  .viewport-container { height: 420px; border-right: none; border-bottom: 2px solid var(--ink); }
+  .panel { max-height: none; padding: 1.5rem; }
+}

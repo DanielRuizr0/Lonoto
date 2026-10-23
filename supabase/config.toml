@@ -1,0 +1,2 @@
+[functions.pedido-galeria]
+verify_jwt = false

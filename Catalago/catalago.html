@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Interactivo - LONOTO</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../Inicio/css/base.css">
+  <link rel="stylesheet" href="../Catalago/stylescata.css">
+  <link rel="stylesheet" href="../Inicio/css/components/nav.css">
+  <link rel="stylesheet" href="../css/carrito.css">
+</head>
+<body>
+
+  <nav>
+    <a href="../Inicio/Pagina inicio.html" class="logo">
+      L<span class="underline-o">O</span>NOT<span class="underline-o">O</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="../Inicio/Pagina inicio.html">Inicio</a>
+      <a href="../Detalles/detalles.html">Detalles</a>
+      <a href="../diseño 3d/Diseño-3D.html">Diseño 3D</a>
+      <a href="../Catalago/catalago.html" class="active">Catálogo</a>
+      <a href="../Diseños/mis-disenos.html">Mis Diseños</a>
+      <button id="btn-abrir-carrito" class="btn-carrito-nav">
+        🛒 CARRITO (<span id="cart-count">0</span>)
+      </button>
+    </div>
+  </nav>
+
+  <!-- SECCIÓN CATÁLOGO -->
+  <section class="catalogo-seccion" id="catalogo">
+    <div class="header-catalogo">
+      <span class="badge-tag">// COLECCIÓN_TALLA_ÚNICA_2026</span>
+      <h2 class="titulo-catalogo">MEDIAS TÉCNICAS <span class="texto-rosa">URBAN.</span></h2>
+    </div>
+
+    <div class="grid-catalogo">
+
+      <!-- Producto 1 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media1_fondo_blanco.jpg"
+               alt="Media blanca con diseño de robot y corazón">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - ROBOT CORAZÓN</h3>
+          <p class="precio">$20.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - ROBOT CORAZÓN" 
+                  data-precio="20000" 
+                  data-img="../assets/images/media1_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 2 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media2_fondo_blanco.jpg"
+               alt="Media blanca con franjas y detalles celestes">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - CELESTE CON FRANJAS</h3>
+          <p class="precio">$21.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - CELESTE CON FRANJAS" 
+                  data-precio="21000" 
+                  data-img="../assets/images/media2_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 3 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media3_fondo_blanco.jpg"
+               alt="Media rosa pastel con detalles blancos">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - ROSA PASTEL</h3>
+          <p class="precio">$22.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - ROSA PASTEL" 
+                  data-precio="22000" 
+                  data-img="../assets/images/media3_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 4 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media4_fondo_blanco.jpg"
+               class="img-media-ampliada img-media-letra-t"
+               alt="Media blanca con letra T negra">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - BLANCA CON LETRA T</h3>
+          <p class="precio">$20.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - BLANCA CON LETRA T" 
+                  data-precio="20000" 
+                  data-img="../assets/images/media4_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 5 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media5_fondo_blanco.jpg"
+               alt="Media negra con franjas y detalles blancos">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - NEGRA CON FRANJAS</h3>
+          <p class="precio">$23.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - NEGRA CON FRANJAS" 
+                  data-precio="23000" 
+                  data-img="../assets/images/media5_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 6 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media6_fondo_blanco.jpg"
+               class="img-media-ampliada"
+               alt="Media color marfil con logo blanco">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - MARFIL CON LOGO</h3>
+          <p class="precio">$22.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - MARFIL CON LOGO" 
+                  data-precio="22000" 
+                  data-img="../assets/images/media6_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 7 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media7_fondo_blanco.jpg"
+               alt="Media blanca con diseño rojo pixelado">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - BLANCA ROJO PIXEL</h3>
+          <p class="precio">$24.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - BLANCA ROJO PIXEL" 
+                  data-precio="24000" 
+                  data-img="../assets/images/media7_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 8 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media8_fondo_blanco.jpg"
+               alt="Media blanca con diseño de monstruo verde">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - MONSTRUO VERDE</h3>
+          <p class="precio">$21.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - MONSTRUO VERDE" 
+                  data-precio="21000" 
+                  data-img="../assets/images/media8_fondo_blanco.jpg"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 9 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media9.png"
+               class="img-media-ampliada"
+               alt="Par de medias clásicas grises">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - GRIS CLÁSICA</h3>
+          <p class="precio">$25.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - GRIS CLÁSICA" 
+                  data-precio="25000" 
+                  data-img="../assets/images/media9.png"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+      <!-- Producto 10 -->
+      <article class="card-producto card-bento card-clara" data-category="cana-alta">
+        <div class="thumb-placeholder">
+          <img src="../assets/images/media10.png"
+               class="img-media-ampliada"
+               alt="Par de medias clásicas negras">
+        </div>
+        <div class="info-producto">
+          <span class="meta-tag">// TALLA_ÚNICA</span>
+          <h3>MEDIA LONOTO - NEGRA CLÁSICA</h3>
+          <p class="precio">$25.000 COP</p>
+          
+          <button class="btn-lonoto btn-neon btn-agregar-carrito" 
+                  data-nombre="MEDIA LONOTO - NEGRA CLÁSICA" 
+                  data-precio="25000" 
+                  data-img="../assets/images/media10.png"
+                  data-tag="// TALLA_ÚNICA">
+            AGREGAR AL CARRITO
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- MODAL DE CARRITO -->
+  <div id="modal-carrito" class="modal-overlay oculto">
+    <div class="modal-contenido card-bento card-clara modal-carrito-box">
+      <button id="cerrar-carrito" class="btn-cerrar">&times;</button>
+      
+      <span class="meta-tag">// TU_PEDIDO</span>
+      <h2 class="titulo-modal">CARRITO DE COMPRAS</h2>
+
+      <div id="lista-carrito" class="lista-carrito"></div>
+
+      <div class="datos-cliente">
+        <span class="meta-tag">// DATOS_ENVIO (OPCIONAL)</span>
+        <div class="inputs-grid">
+          <input type="text" id="cliente-nombre" class="input-lonoto" placeholder="Tu Nombre">
+          <input type="text" id="cliente-ciudad" class="input-lonoto" placeholder="Ciudad / Municipio">
+        </div>
+      </div>
+
+      <div class="resumen-carrito">
+        <div class="total-row">
+          <span>TOTAL:</span>
+          <span id="total-carrito" class="precio">$0 COP</span>
+        </div>
+
+        <a id="btn-whatsapp-carrito" href="#" target="_blank" class="btn-lonoto btn-neon btn-ws">
+          CONFIRMAR PEDIDO POR WHATSAPP
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Lonoto. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Cargar el carrito como módulo para que soporte Supabase y active los eventos -->
+<script type="module" src="../js/carrito.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>

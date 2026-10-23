@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lonoto | Acceso & Registro</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link rel="stylesheet" href="./Inicio/css/base.css">
+    <link rel="stylesheet" href="./Inicio/css/components/nav.css">
+    <link rel="stylesheet" href="./css/carrito.css">
+    <!-- Fuentes oficiales de Lonoto -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;700&family=Permanent+Marker&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body { 
+            background: var(--asphalt); 
+            color: var(--paper); 
+            font-family: 'Space Grotesk', sans-serif; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        nav { position: static; }
+
+        /* --- CONTENEDOR PRINCIPAL DE AUTENTICACIÓN --- */
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            position: relative;
+            background: radial-gradient(circle at center, #212226 0%, #17181A 100%);
+        }
+
+        .bg-tag {
+            position: absolute;
+            font-family: 'Permanent Marker', cursive;
+            font-size: clamp(100px, 20vw, 280px);
+            color: rgba(255, 61, 138, 0.05);
+            user-select: none;
+            pointer-events: none;
+            transform: rotate(-6deg);
+            z-index: 1;
+        }
+
+        .auth-card {
+            position: relative;
+            z-index: 2;
+            background: var(--asphalt-2);
+            border: 2px solid var(--paper-2);
+            border-radius: 6px;
+            width: 100%;
+            max-width: 460px;
+            padding: 40px;
+            box-shadow: 8px 8px 0px var(--lime);
+            transition: var(--transition);
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--asphalt);
+            padding: 6px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--lime);
+            color: var(--asphalt);
+            border-radius: 2px;
+        }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        .auth-form h2 {
+            font-family: 'Bungee', cursive;
+            font-size: 24px;
+            color: var(--paper);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .auth-form p.subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--lime);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--asphalt);
+            border: 2px solid #333;
+            border-radius: 4px;
+            color: var(--paper);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: var(--magenta);
+            box-shadow: 0 0 10px rgba(255, 61, 138, 0.2);
+        }
+
+        /* Mensajes de feedback dinámicos */
+        .feedback-msg {
+            display: none;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .feedback-msg.error {
+            display: block;
+            background: rgba(255, 61, 138, 0.15);
+            border: 1px solid var(--magenta);
+            color: var(--magenta);
+        }
+
+        .feedback-msg.success {
+            display: block;
+            background: rgba(201, 255, 62, 0.15);
+            border: 1px solid var(--lime);
+            color: var(--lime);
+        }
+
+        .btn-auth {
+            width: 100%;
+            background: var(--lime);
+            color: var(--asphalt);
+            border: 2px solid var(--lime);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .btn-auth:hover {
+            background: transparent;
+            color: var(--lime);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background: #111213;
+            color: var(--muted);
+            text-align: center;
+            padding: 25px 6vw;
+            border-top: 1px solid var(--asphalt-2);
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card { padding: 25px; }
+            nav { padding: 15px 4vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="promo-bar">Acceso al Laboratorio // Autenticación de Usuario</div>
+
+    <nav>
+        <a href="Inicio/Pagina inicio.html" class="logo">
+            L<span class="underline-o">O</span>NOT<span class="underline-o">O</span>
+        </a>
+    </nav>
+
+    <main class="auth-container">
+        <div class="bg-tag">LONOTO</div>
+
+        <div class="auth-card">
+            
+            <div class="auth-tabs">
+                <button id="tabLogin" class="tab-btn active">Ingresar</button>
+                <button id="tabRegister" class="tab-btn">Registro</button>
+            </div>
+
+            <!-- Contenedor para mostrar mensajes de éxito o error -->
+            <div id="authAlert" class="feedback-msg"></div>
+
+            <!-- FORMULARIO DE INICIO DE SESIÓN -->
+            <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <h2>Identificación</h2>
+                <p class="subtitle">Ingresa tus credenciales para acceder a tus configuraciones guardadas de medias.</p>
+
+                <div class="form-group">
+                    <label class="mono">// CORREO_ELECTRÓNICO</label>
+                    <input type="email" id="loginEmail" placeholder="usuario@lonoto.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="mono">// CONTRASEÑA</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" id="btnLoginSubmit" class="btn-auth">Iniciar Sesión</button>
+            </form>
+
+            <!-- FORMULARIO DE REGISTRO -->
+            <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                <h2>Nuevo Registro</h2>
+                <p class="subtitle">Crea un perfil de creador para guardar e imprimir tus modelos 3D.</p>
+
+                <div class="form-group">
+                    <label class="mono">// NOMBRE_COMPLETO</label>
+                    <input type="text" id="regName" placeholder="Tu Nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="mono">// CORREO_ELECTRÓNICO</label>
+                    <input type="email" id="regEmail" placeholder="usuario@lonoto.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="mono">// CREAR_CONTRASEÑA</label>
+                    <input type="password" id="regPassword" placeholder="••••••••" required minlength="6">
+                </div>
+
+                <button type="submit" id="btnRegSubmit" class="btn-auth">Crear Cuenta</button>
+            </form>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Lonoto. Arquitectura Textil & Design Systems.</p>
+    </footer>
+
+    <!-- LÓGICA DE CONEXIÓN CON SUPABASE -->
+    <script>
+        // 1. INICIALIZAR SUPABASE
+        // NOTA: Asegúrate de que SUPABASE_KEY coincida con tu clave pública "anon" de Supabase
+        const SUPABASE_URL = 'https://utqdeypdsoryinmarqpa.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_SRn8Cftpa30Pig-L-X4CIg_cLPiQIpQ';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                storage: window.sessionStorage
+            }
+        });
+
+        // UI Tabs Switcher
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegister = document.getElementById('tabRegister');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const authAlert = document.getElementById('authAlert');
+
+        function showAlert(msg, isError = true) {
+            authAlert.textContent = msg;
+            authAlert.className = `feedback-msg ${isError ? 'error' : 'success'}`;
+        }
+
+        function clearAlert() {
+            authAlert.textContent = '';
+            authAlert.className = 'feedback-msg';
+        }
+
+        async function redirectIfAuthenticated() {
+            try {
+                const { data, error } = await _supabase.auth.getSession();
+
+                if (error) {
+                    console.error('No se pudo verificar la sesión:', error);
+                    showAlert('No se pudo verificar la sesión. Intenta recargar la página.', true);
+                    return;
+                }
+
+                if (data.session) {
+                    window.location.replace('Inicio/Pagina inicio.html');
+                }
+            } catch (error) {
+                console.error('No se pudo verificar la sesión:', error);
+                showAlert('No se pudo verificar la sesión. Intenta recargar la página.', true);
+            }
+        }
+
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                void redirectIfAuthenticated();
+            }
+        });
+
+        void redirectIfAuthenticated();
+
+        tabLogin.addEventListener('click', () => {
+            clearAlert();
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+
+        tabRegister.addEventListener('click', () => {
+            clearAlert();
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+
+        // 2. FUNCIÓN DE INICIO DE SESIÓN
+        async function handleLogin(e) {
+            e.preventDefault();
+            clearAlert();
+            
+            const btn = document.getElementById('btnLoginSubmit');
+            btn.disabled = true;
+            btn.textContent = 'AUTENTICANDO...';
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const { data, error } = await _supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            btn.disabled = false;
+            btn.textContent = 'Iniciar Sesión';
+
+            if (error) {
+                showAlert(`ERROR: ${error.message}`, true);
+            } else {
+                showAlert('¡ACCESO CORRECTO! Redirigiendo...', false);
+                
+                // Limpiar formulario de inicio de sesión
+                loginForm.reset();
+
+                setTimeout(() => {
+                    window.location.replace('Inicio/Pagina inicio.html');
+                }, 1500);
+            }
+        }
+
+        // 3. FUNCIÓN DE REGISTRO
+        async function handleRegister(e) {
+            e.preventDefault();
+            clearAlert();
+
+            const btn = document.getElementById('btnRegSubmit');
+            btn.disabled = true;
+            btn.textContent = 'CREANDO CUENTA...';
+
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            const { data, error } = await _supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        full_name: name
+                    }
+                }
+            });
+
+            btn.disabled = false;
+            btn.textContent = 'Crear Cuenta';
+
+            if (error) {
+                showAlert(`ERROR: ${error.message}`, true);
+            } else {
+                showAlert('¡CUENTA CREADA CON ÉXITO! Redirigiendo...', false);
+
+                // Limpieza de los campos del formulario tras pulsar el botón de registro
+                registerForm.reset();
+
+                setTimeout(() => {
+                    window.location.replace('Inicio/Pagina inicio.html');
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>

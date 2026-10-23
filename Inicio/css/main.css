@@ -1,0 +1,12 @@
+/* css/main.css */
+
+@import 'base.css';
+@import 'components/bento.css';
+@import 'components/faq.css';
+@import 'components/footer.css';
+@import 'components/hero.css';
+@import 'components/manifesto.css';
+@import 'components/nav.css';
+@import 'components/newsletter.css';
+@import 'components/specs.css';
+@import 'components/ticker.css';
