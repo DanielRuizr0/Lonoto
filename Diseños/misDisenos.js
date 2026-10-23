@@ -152,7 +152,7 @@ async function pedirPorWhatsApp(diseno, boton) {
         precio: 25000,
         cantidad: 1,
         galeriaId: galleryId,
-        imagenes: [{ etiqueta: 'Vista principal del modelo 3D', ruta: path, galeriaId }]
+        imagenes: [{ etiqueta: 'Vista principal del modelo 3D', ruta: path, galeriaId: galleryId }]
       }]
     };
     const enlaceGaleria = await crearGaleriaPrivadaPedido(supabase, pedido);
