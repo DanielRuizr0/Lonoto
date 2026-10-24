@@ -1,5 +1,9 @@
 import { supabase } from '../js/supabaseClient.js';
-import { crearGaleriaPrivadaPedido, subirImagenGaleria } from '../js/galeriaPedido.js';
+import { crearGaleriaPrivadaPedido } from '../js/galeriaPedido.js';
+import {
+  crearMensajePedidoDiseno,
+  crearProductoDisenoParaPedido
+} from '../js/disenoLogica.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const loader = document.getElementById('loader-disenos');
@@ -115,8 +119,18 @@ function renderizarTarjetas(disenos, contenedor) {
 }
 
 async function pedirPorWhatsApp(diseno, boton) {
+  const galeriaGuardada = diseno.configuracion_3d?.galeriaPrivada;
+  const debePrepararVistas = !galeriaGuardada || !Array.isArray(galeriaGuardada.imagenes)
+    || galeriaGuardada.imagenes.length === 0;
+  const clavePedidoPendiente = 'lonoto_diseno_pedido_pendiente';
+
+  if (debePrepararVistas) {
+    sessionStorage.setItem(clavePedidoPendiente, JSON.stringify(diseno));
+  }
+
   const ventanaWhatsApp = window.open('about:blank', '_blank');
   if (!ventanaWhatsApp) {
+    if (debePrepararVistas) sessionStorage.removeItem(clavePedidoPendiente);
     alert('Permite las ventanas emergentes para abrir WhatsApp y vuelve a intentarlo.');
     return;
   }
@@ -127,50 +141,21 @@ async function pedirPorWhatsApp(diseno, boton) {
   boton.disabled = true;
 
   try {
-    const captura = diseno.url_vista_previa_3d;
-    if (typeof captura !== 'string' || !captura.startsWith('data:image/')) {
-      throw new Error('Este diseño no tiene una captura 3D guardada. Ábrelo en Diseño 3D y vuelve a guardarlo para poder pedirlo.');
+    if (debePrepararVistas) {
+      const paginaDiseno = new URL('../diseño 3d/Diseño-3D.html', import.meta.url);
+      paginaDiseno.searchParams.set('prepararPedidoGuardado', '1');
+      ventanaWhatsApp.location.href = paginaDiseno.href;
+      return;
     }
 
-    const mime = captura.slice(5, captura.indexOf(';'));
-    const extensiones = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
-    const extension = extensiones[mime];
-    if (!extension) throw new Error('La captura guardada debe ser JPG, PNG o WebP.');
-
-    const datos = captura.slice(captura.indexOf(',') + 1);
-    const bytes = Uint8Array.from(atob(datos), caracter => caracter.charCodeAt(0));
-    const archivo = new File([bytes], `modelo-${diseno.id_diseno}.${extension}`, { type: mime });
-    const galleryId = crypto.randomUUID();
-    const ruta = `${galleryId}/${crypto.randomUUID()}.${extension}`;
-    const path = await subirImagenGaleria(supabase, archivo, ruta);
     const pedido = {
       nombre: '',
       ciudad: '',
       total: 25000,
-      productos: [{
-        nombre: diseno.nombre_diseno || 'MEDIA PERSONALIZADA 3D',
-        precio: 25000,
-        cantidad: 1,
-        galeriaId: galleryId,
-        imagenes: [{ etiqueta: 'Vista principal del modelo 3D', ruta: path, galeriaId: galleryId }]
-      }]
+      productos: [crearProductoDisenoParaPedido(diseno)]
     };
     const enlaceGaleria = await crearGaleriaPrivadaPedido(supabase, pedido);
-    const config = diseno.configuracion_3d || {};
-
-    let mensaje = `¡Hola LONOTO! 👋 Deseo pedir la fabricación de mi prototipo:\n\n`;
-    mensaje += `📌 *Nombre:* ${diseno.nombre_diseno}\n`;
-    mensaje += `🆔 *Referencia:* #${diseno.id_diseno}\n`;
-    mensaje += `🎨 *Color Base Media:* ${config.colorBase || 'Blanco'}\n\n`;
-    mensaje += `🧦 *VER MODELO 3D Y FOTOS DEL PEDIDO:*\n${enlaceGaleria}\n\n`;
-
-    if (config.urlLogoHD) {
-      mensaje += `🖼️ *DESCARGAR LOGO ORIGINAL HD:*\n${config.urlLogoHD}\n\n`;
-    } else {
-      mensaje += `⚠️ *Nota:* Este diseño se creó solo con color base o la imagen no se subió a Storage.\n\n`;
-    }
-
-    mensaje += `Quedo atento para confirmar el valor total y método de envío.`;
+    const mensaje = crearMensajePedidoDiseno(diseno, enlaceGaleria);
     const numeroTelefono = '573127557563';
     ventanaWhatsApp.location.href =
       `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`;

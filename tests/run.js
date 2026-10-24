@@ -5,7 +5,12 @@ import {
   crearMensajePedido,
   eliminarProductoCarrito
 } from '../js/logicaCarrito.js';
-import { crearConfiguracionDiseno, esPixelFondoBlanco } from '../js/disenoLogica.js';
+import {
+  crearConfiguracionDiseno,
+  crearMensajePedidoDiseno,
+  crearProductoDisenoParaPedido,
+  esPixelFondoBlanco
+} from '../js/disenoLogica.js';
 import { crearServicioDisenos } from '../js/disenosServiceLogic.js';
 import { crearGaleriaPrivadaPedido } from '../js/galeriaPedido.js';
 
@@ -219,6 +224,58 @@ probar('construye la configuración 3D con sus valores de estado', () => {
     texturaDataURL: 'data:image/png;base64,abc'
   });
   afirmarIgual(crearConfiguracionDiseno(estado, null).duplicarEstampado, false);
+});
+
+probar('incluye todas las vistas guardadas del diseño en el pedido', () => {
+  const imagenes = [
+    { etiqueta: 'Vista principal', ruta: 'galeria/imagen-1.jpg' },
+    { etiqueta: 'Frente', ruta: 'galeria/imagen-2.jpg' },
+    { etiqueta: 'Perfil Derecho', ruta: 'galeria/imagen-3.jpg' }
+  ];
+  const producto = crearProductoDisenoParaPedido({
+    nombre_diseno: 'Media personalizada',
+    configuracion_3d: { galeriaPrivada: { id: 'galeria', imagenes } }
+  });
+
+  afirmarIgual(producto.galeriaId, 'galeria');
+  afirmarIgual(producto.imagenes, imagenes);
+  afirmarIgual(producto.imagenes.length, 3);
+});
+
+probar('incluye el máximo de seis vistas incluyendo el logo original', () => {
+  const imagenes = Array.from({ length: 6 }, (_, indice) => ({
+    etiqueta: `Vista ${indice + 1}`,
+    ruta: `galeria/imagen-${indice + 1}.jpg`
+  }));
+  const producto = crearProductoDisenoParaPedido({
+    nombre_diseno: 'Media',
+    configuracion_3d: { galeriaPrivada: { id: 'galeria', imagenes } }
+  });
+
+  afirmarIgual(producto.imagenes.length, 6);
+});
+
+probar('construye el mensaje de WhatsApp sin texto adicional del logo', () => {
+  const mensaje = crearMensajePedidoDiseno({
+    id_diseno: 15,
+    nombre_diseno: 'Media personalizada',
+    configuracion_3d: { colorBase: '#123456', urlLogoHD: 'https://ejemplo.test/logo.png' }
+  }, 'https://ejemplo.test/galeria?token=privado');
+
+  afirmar(mensaje.includes('#15'), 'Debe incluir la referencia del diseño');
+  afirmar(mensaje.includes('https://ejemplo.test/galeria?token=privado'), 'Debe incluir la galería privada');
+  afirmar(!mensaje.includes('DESCARGAR LOGO ORIGINAL HD'), 'No debe incluir el texto adicional del logo');
+  afirmar(!mensaje.includes('https://ejemplo.test/logo.png'), 'No debe enviar el enlace separado del logo');
+});
+
+probar('avisa cuando un diseño guardado aún no tiene galería de vistas 3D', () => {
+  let mensaje;
+  try {
+    crearProductoDisenoParaPedido({ configuracion_3d: {} });
+  } catch (error) {
+    mensaje = error.message;
+  }
+  afirmar(mensaje?.includes('guárdalo nuevamente'), 'Debe explicar cómo generar las vistas faltantes');
 });
 
 probar('guarda el diseño con usuario, nombre predeterminado y vista previa', async () => {

@@ -338,6 +338,7 @@ window.tomarCapturasMultiples3D = async function() {
 
 const loader = new THREE.GLTFLoader();
 let currentModel = null;
+window.modelo3DCargado = false;
 
 loader.load(
   'media.glb',
@@ -364,6 +365,8 @@ loader.load(
     model.position.sub(center);
 
     scene.add(model);
+    window.modelo3DCargado = true;
+    window.dispatchEvent(new Event('lonoto:modelo3DCargado'));
     
     const loaderOverlay = document.getElementById('loaderOverlay');
     if (loaderOverlay) loaderOverlay.style.display = 'none';
@@ -490,10 +493,13 @@ window.addEventListener('reconstruirTextura3D', (e) => {
       state.uploadedImage = img;
       state.processedImage = img;
       updateTexture();
+      window.dispatchEvent(new Event('lonoto:texturaReconstruida'));
     };
+    img.onerror = () => window.dispatchEvent(new Event('lonoto:errorReconstruirTextura'));
     img.src = config.texturaDataURL;
   } else {
     updateTexture();
+    window.dispatchEvent(new Event('lonoto:texturaReconstruida'));
   }
 });
 

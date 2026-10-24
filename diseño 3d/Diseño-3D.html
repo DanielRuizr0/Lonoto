@@ -180,7 +180,137 @@
   <script type="module" src="../diseño 3d/script.js"></script>
 
   <script type="module">
-    import { guardarDiseñoActual, cargarDiseñoEnEscena, subirImagenStorage } from './disenosService.js';
+    import { guardarDiseñoActual, cargarDiseñoEnEscena, subirImagenStorage, subirArchivoGaleria } from './disenosService.js';
+    import { supabase } from '../js/supabaseClient.js';
+    import { crearGaleriaPrivadaPedido } from '../js/galeriaPedido.js';
+    import {
+      crearMensajePedidoDiseno,
+      crearProductoDisenoParaPedido
+    } from '../js/disenoLogica.js';
+
+    function convertirDataURLaArchivo(dataURL, nombre) {
+      const [cabecera, datos] = dataURL.split(',');
+      const mime = cabecera.match(/data:(.*?);base64/)[1];
+      const bytes = Uint8Array.from(atob(datos), caracter => caracter.charCodeAt(0));
+      return new File([bytes], nombre, { type: mime });
+    }
+
+    async function guardarCapturasGaleria(configuracion, capturaPrincipal) {
+      if (!window.modelo3DCargado) {
+        throw new Error('El modelo 3D todavía se está cargando. Espera a que aparezca y vuelve a guardar.');
+      }
+      if (!capturaPrincipal?.startsWith('data:image/jpeg')) {
+        throw new Error('No se pudo generar la vista principal del modelo 3D.');
+      }
+
+      const capturas = await window.tomarCapturasMultiples3D();
+      if (capturas.length !== 4 || capturas.some(captura => !captura.url?.startsWith('data:image/jpeg'))) {
+        throw new Error('No se pudieron generar las cuatro vistas del modelo 3D.');
+      }
+
+      const galleryId = crypto.randomUUID();
+      const archivos = [
+        { etiqueta: 'Vista principal', archivo: convertirDataURLaArchivo(capturaPrincipal, 'modelo-principal.jpg') },
+        ...capturas.map(captura => ({
+          etiqueta: captura.angulo,
+          archivo: convertirDataURLaArchivo(captura.url, `modelo-${captura.angulo}.jpg`)
+        }))
+      ];
+
+      if (archivoImagenSeleccionado) {
+        const extension = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }[archivoImagenSeleccionado.type];
+        if (!extension) throw new Error('El logo debe ser una imagen JPG, PNG o WebP.');
+        archivos.push({
+          etiqueta: 'Logo original',
+          archivo: new File([archivoImagenSeleccionado], `logo-original.${extension}`, {
+            type: archivoImagenSeleccionado.type
+          })
+        });
+      }
+
+      const imagenes = [];
+      for (const imagen of archivos) {
+        const extension = imagen.archivo.type === 'image/jpeg' ? 'jpg'
+          : imagen.archivo.type === 'image/png' ? 'png' : 'webp';
+        const ruta = `${galleryId}/${crypto.randomUUID()}.${extension}`;
+        await subirArchivoGaleria(imagen.archivo, ruta);
+        imagenes.push({ etiqueta: imagen.etiqueta, ruta });
+      }
+
+      configuracion.galeriaPrivada = { id: galleryId, imagenes };
+    }
+
+    function esperarEvento(nombre, timeoutMs = 30000) {
+      return new Promise((resolve, reject) => {
+        const temporizador = setTimeout(() => {
+          window.removeEventListener(nombre, alCompletar);
+          reject(new Error('El modelo 3D tardó demasiado en prepararse. Vuelve a intentarlo.'));
+        }, timeoutMs);
+        const alCompletar = () => {
+          clearTimeout(temporizador);
+          resolve();
+        };
+        window.addEventListener(nombre, alCompletar, { once: true });
+      });
+    }
+
+    function esperarTexturaReconstruida() {
+      return new Promise((resolve, reject) => {
+        const limpiar = () => {
+          clearTimeout(temporizador);
+          window.removeEventListener('lonoto:texturaReconstruida', alReconstruir);
+          window.removeEventListener('lonoto:errorReconstruirTextura', alError);
+        };
+        const alReconstruir = () => {
+          limpiar();
+          resolve();
+        };
+        const alError = () => {
+          limpiar();
+          reject(new Error('No se pudo reconstruir la textura guardada.'));
+        };
+        const temporizador = setTimeout(() => {
+          limpiar();
+          reject(new Error('La textura guardada tardó demasiado en prepararse.'));
+        }, 30000);
+        window.addEventListener('lonoto:texturaReconstruida', alReconstruir, { once: true });
+        window.addEventListener('lonoto:errorReconstruirTextura', alError, { once: true });
+      });
+    }
+
+    async function prepararPedidoDisenoGuardado(diseno) {
+      if (!window.modelo3DCargado) {
+        await esperarEvento('lonoto:modelo3DCargado');
+      }
+
+      const texturaLista = esperarTexturaReconstruida();
+      window.dispatchEvent(new CustomEvent('reconstruirTextura3D', {
+        detail: diseno.configuracion_3d || {}
+      }));
+      await texturaLista;
+
+      const configuracion = { ...(diseno.configuracion_3d || {}) };
+      await guardarCapturasGaleria(configuracion, window.tomarCaptura3D());
+
+      const { error } = await supabase
+        .from('disenos_personalizados')
+        .update({ configuracion_3d: configuracion })
+        .eq('id_diseno', diseno.id_diseno);
+      if (error) throw error;
+
+      diseno.configuracion_3d = configuracion;
+      const pedido = {
+        nombre: '',
+        ciudad: '',
+        total: 25000,
+        productos: [crearProductoDisenoParaPedido(diseno)]
+      };
+      const enlaceGaleria = await crearGaleriaPrivadaPedido(supabase, pedido);
+      const numeroTelefono = '573127557563';
+      const mensaje = crearMensajePedidoDiseno(diseno, enlaceGaleria);
+      window.location.href =
+        `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+    }
 
     let archivoImagenSeleccionado = null;
 
@@ -210,33 +340,66 @@
         const textoOriginal = btnGuardar.innerText;
         btnGuardar.innerText = 'GUARDANDO Y SUBIENDO ARCHIVOS...';
 
-        const captura3D = window.tomarCaptura3D ? window.tomarCaptura3D() : null;
-        const config3D = window.obtenerConfiguracionActual ? window.obtenerConfiguracionActual() : {};
+        try {
+          const captura3D = window.tomarCaptura3D ? window.tomarCaptura3D() : null;
+          const config3D = window.obtenerConfiguracionActual ? window.obtenerConfiguracionActual() : {};
+          btnGuardar.innerText = 'PREPARANDO VISTAS 3D...';
+          await guardarCapturasGaleria(config3D, captura3D);
 
-        if (archivoImagenSeleccionado) {
-          btnGuardar.innerText = 'SUBIENDO GRÁFICO ORIGINAL...';
-          const urlLogoHD = await subirImagenStorage(archivoImagenSeleccionado);
-          
-          if (urlLogoHD) {
-            config3D.urlLogoHD = urlLogoHD;
-            window.ultimoLogoHDSubido = urlLogoHD;
-          } else {
-            alert('⚠️ Atención: El diseño se guardará, pero no se pudo subir el logo en HD a Storage.');
+          if (archivoImagenSeleccionado) {
+            btnGuardar.innerText = 'SUBIENDO GRÁFICO ORIGINAL...';
+            const urlLogoHD = await subirImagenStorage(archivoImagenSeleccionado);
+
+            if (urlLogoHD) {
+              config3D.urlLogoHD = urlLogoHD;
+              window.ultimoLogoHDSubido = urlLogoHD;
+            } else {
+              alert('⚠️ Atención: el diseño se guardará, pero no se pudo subir el logo original a Storage.');
+            }
           }
-        }
 
-        const resultado = await guardarDiseñoActual(nombre, config3D, captura3D);
+          const resultado = await guardarDiseñoActual(nombre, config3D, captura3D);
 
-        btnGuardar.disabled = false;
-        btnGuardar.innerText = textoOriginal;
-
-        if (resultado) {
-          archivoImagenSeleccionado = null;
+          if (resultado) {
+            archivoImagenSeleccionado = null;
+          }
+        } catch (error) {
+          console.error('No se pudieron guardar las vistas privadas del diseño:', error);
+          alert(error instanceof Error
+            ? `No se pudo guardar el diseño: ${error.message}`
+            : 'No se pudieron guardar las vistas del diseño. Inténtalo de nuevo.');
+        } finally {
+          btnGuardar.disabled = false;
+          btnGuardar.innerText = textoOriginal;
         }
       });
     }
 
     window.addEventListener('load', () => {
+      const parametros = new URLSearchParams(window.location.search);
+      if (parametros.get('prepararPedidoGuardado') === '1') {
+        const clavePedidoPendiente = 'lonoto_diseno_pedido_pendiente';
+        const pendiente = sessionStorage.getItem(clavePedidoPendiente);
+        sessionStorage.removeItem(clavePedidoPendiente);
+
+        try {
+          if (!pendiente) throw new Error('No se encontró el diseño que se va a pedir.');
+          const diseno = JSON.parse(pendiente);
+          void prepararPedidoDisenoGuardado(diseno).catch(error => {
+            console.error('No se pudo preparar el pedido del diseño guardado:', error);
+            alert(error instanceof Error
+              ? `No se pudo preparar el pedido: ${error.message}`
+              : 'No se pudo preparar el pedido. Inténtalo de nuevo.');
+          });
+        } catch (error) {
+          console.error('No se pudo recuperar el diseño guardado para el pedido:', error);
+          alert(error instanceof Error
+            ? `No se pudo preparar el pedido: ${error.message}`
+            : 'No se pudo recuperar el diseño guardado.');
+        }
+        return;
+      }
+
       const disenoGuardado = sessionStorage.getItem('diseno_a_cargar');
       if (disenoGuardado) {
         try {
