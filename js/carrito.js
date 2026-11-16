@@ -24,6 +24,7 @@ function obtenerClaveStorage() {
 document.addEventListener('DOMContentLoaded', async () => {
   await verificarUsuarioYCargarCarrito();
   inicializarEventosCarrito();
+  inicializarCierreSesion();
 
   supabase.auth.onAuthStateChange(async (event, session) => {
     usuarioActual = session ? session.user : null;
@@ -70,6 +71,29 @@ async function cargarCarritoPorUsuario() {
   }
 
   renderizarCarrito();
+}
+
+function inicializarCierreSesion() {
+  const boton = document.getElementById('btn-cerrar-sesion');
+  if (!boton) return;
+
+  boton.addEventListener('click', async () => {
+    const textoOriginal = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = 'CERRANDO SESIÓN...';
+
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      window.location.replace(new URL('../index.html', import.meta.url));
+    } catch (error) {
+      console.error('No se pudo cerrar la sesión:', error);
+      alert('No se pudo cerrar la sesión. Inténtalo de nuevo.');
+      boton.disabled = false;
+      boton.textContent = textoOriginal;
+    }
+  });
 }
 
 function cargarCarritoLocal() {

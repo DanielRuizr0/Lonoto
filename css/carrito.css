@@ -22,6 +22,25 @@
   color: #000;
 }
 
+.btn-cerrar-sesion {
+  background-color: transparent;
+  color: var(--paper, #EFECE6);
+  border: 2px solid var(--paper, #EFECE6);
+  padding: 0.5rem 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.btn-cerrar-sesion:hover {
+  background-color: var(--paper, #EFECE6);
+  color: #000;
+}
+
 /* Modal Overlay (Fondo Oscuro) */
 .modal-overlay {
   position: fixed;
